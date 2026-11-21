@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FlowOps – AI assistant for support, quotes and requests</title>
+<meta name="description" content="AI assistant for your website and WhatsApp: replies in seconds 24/7, calculates prices, hands complex questions to your manager. Live in 48 hours.">
+<meta property="og:title" content="FlowOps – AI assistant for website and WhatsApp">
+<meta property="og:description" content="Automate routine and turn more requests into orders. Starter from €149/month, live in 48 hours.">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0f12;--tx:#f2f3f5;--mu:#9a9fa8;--v:#8b3dff;--m:#e11d89;--c:#2f5bff;--g:#3ef2c0;--fox:#ff6b2b;--lemon:#ffc93c;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.55 Inter,system-ui,sans-serif;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:48px 48px;overflow-x:hidden}
+h1,h2,h3,.logo{font-family:Unbounded,"Arial Black",sans-serif;font-weight:700;letter-spacing:.02em;margin:0}
+section,header,footer{padding:0 20px}.w{max-width:1080px;margin:0 auto;position:relative;z-index:1}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:#0e0f12dd;backdrop-filter:blur(10px);border-bottom:1px solid #ffffff1a}
+header .w{display:flex;justify-content:space-between;align-items:center;height:62px}
+.logo{font-size:20px;letter-spacing:.04em;display:flex;align-items:center;gap:6px;text-shadow:0 0 18px #8b3dff33}.logo b{color:var(--g)}.logo::before{content:"//";color:var(--v);font-size:16px}
+.lang button{background:none;border:1px solid #ffffff22;color:var(--mu);padding:5px 10px;margin-left:4px;cursor:pointer;font:500 12px Inter;border-radius:999px}
+.lang button[aria-pressed=true]{color:var(--bg);background:var(--g);border-color:var(--g)}
+.badge{display:none;border:1px dashed var(--m);color:var(--m);padding:3px 9px;font-size:12px;border-radius:999px}
+.ua .badge{display:inline-block}.ua .lang{display:none}
+.hero{min-height:calc(100vh - 62px);display:flex;align-items:center;padding-top:48px;padding-bottom:48px;position:relative;overflow:hidden}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;pointer-events:none;filter:blur(8px)}
+.hero::before{width:520px;height:520px;right:-180px;top:-120px;background:radial-gradient(circle,#8b3dff33,transparent 68%)}
+.hero::after{width:380px;height:380px;left:-140px;bottom:-140px;background:radial-gradient(circle,#2f5bff2b,transparent 68%)}
+.lp{stroke:#8b3dff}.lm{stroke:#e11d89}.lg{stroke:#3ef2c0}
+.cp,.cm,.cg{filter:drop-shadow(0 0 4px currentColor)}.cp{fill:#8b3dff;color:#8b3dff}.cm{fill:#e11d89;color:#e11d89}.cg{fill:#3ef2c0;color:#3ef2c0}
+canvas.net{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+body{counter-reset:s}
+.eb{font:500 13px Unbounded,sans-serif;color:var(--g);text-shadow:2px 0 var(--m),-2px 0 var(--c);margin-bottom:20px}
+h1{font-size:clamp(30px,6.4vw,76px);line-height:1.02;letter-spacing:-.04em;font-weight:500;max-width:15em}
+.sub{color:var(--mu);font-size:clamp(16px,2vw,19px);max-width:38em;margin:20px 0}
+.tags{color:#c4c9d4;font-size:13.5px;border-left:2px solid var(--v);padding-left:12px;margin-bottom:30px;line-height:1.6}
+.bar{height:34px;width:160px;margin:36px auto 0;opacity:.5;background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 5px,#fff 5px 6px,transparent 6px 11px,#fff 11px 15px,transparent 15px 17px)}
+.wv{display:block;width:100%;height:90px}
+.btn{display:inline-block;background:var(--v);color:var(--lemon);font:700 15px Unbounded,sans-serif;padding:16px 28px;text-decoration:none;border:1px solid #b17aff;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 24px #8b3dff55;border-radius:16px}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px #8b3dff88;background:#9852ff}
+.btn:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.btn-sm{padding:10px 18px;font-size:12px;margin-top:auto;width:100%;text-align:center;border-radius:12px}
+.sec{padding-top:96px;padding-bottom:96px;position:relative}
+h2{font-size:clamp(26px,4.4vw,48px);line-height:1.08;letter-spacing:-.025em;margin-bottom:40px}h2::before{counter-increment:s;content:"0" counter(s) " — ";display:block;font:500 12px Inter,sans-serif;letter-spacing:.16em;color:var(--mu);margin-bottom:14px}
+.cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+#G1{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.pain{border:1px solid #ffffff22;padding:20px;font-size:15px;line-height:1.5;position:relative;border-radius:20px;background:#ffffff05}.pain::before{content:"✕";color:var(--m);margin-right:10px;font-weight:700}
+.sol{margin-top:28px;border:1px solid transparent;background:linear-gradient(#11121a,#11121a) padding-box,linear-gradient(120deg,#5ee7ff,#ff7ad9,#ffe66d,#8b3dff) border-box;padding:28px;line-height:1.6;border-radius:28px}.sol h3{font-size:17px;color:var(--g);margin-bottom:10px}
+.route{list-style:none;margin:0 0 36px;padding:0;display:grid;gap:24px;grid-template-columns:repeat(4,1fr)}
+.route li{border-top:1px solid #ffffff26;padding-top:20px;position:relative;font-size:14px;line-height:1.5;color:var(--mu)}
+.route li b{display:block;color:var(--tx);font:700 14px Unbounded,sans-serif;margin-bottom:6px}
+.route li::before{content:"0" attr(data-n);display:block;font:700 44px Unbounded,sans-serif;color:transparent;-webkit-text-stroke:1px #ffffff66;letter-spacing:-.02em;margin-bottom:14px}
+.ctr{text-align:center;margin:44px 0}
+h3.g{font-size:16px;margin:48px 0 18px}
+.card-wrapper{display:flex;flex-direction:column;height:100%}
+.card{padding:22px;border:1px solid;display:flex;flex-direction:column;gap:7px;height:100%;transition:transform .25s ease,box-shadow .25s ease;flex-grow:1;border-radius:26px;position:relative}
+@media(hover:hover) and (min-width:761px){.card:hover{transform:translateY(-4px) scale(1.045);z-index:3;box-shadow:0 18px 40px #00000066}}
+.card h4{margin:0;font:700 15px Unbounded}.pr{font:700 24px Unbounded;margin:4px 0 8px;background:linear-gradient(180deg,#fff,#a9b8d8 60%,#eef3ff);-webkit-background-clip:text;background-clip:text;color:transparent}.pr small{font:400 13px Inter;color:var(--mu)}
+.card p{margin:0;font-size:14px;line-height:1.45}.card p::before{content:"+ ";opacity:.6}
+.t1{border-color:var(--v);background:linear-gradient(160deg,#8b3dff30,#8b3dff0d)}.t1 h4{color:#c9a6ff}
+.t1-ag{border-color:var(--m);background:linear-gradient(160deg,#e11d8930,#8b3dff14)}.t1-ag h4{color:#ff7ac3}
+.t2{border-color:var(--fox);background:linear-gradient(160deg,#ff6b2b33,#ff6b2b0d)}.t2 h4{color:#ff9e73}
+.t3{border-color:var(--g);background:linear-gradient(160deg,#3ef2c01f,#3ef2c008)}.t3 h4{color:var(--g)}
+.once{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--g)}
+.fn{font-size:12px;color:var(--mu);margin:8px 2px 0}
+.note{color:var(--mu);font-size:14px;margin-top:16px;line-height:1.5}
+footer{padding-top:24px;padding-bottom:110px;color:var(--mu);font-size:13px;line-height:1.6}
+#cta{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;padding:12px 18px;font-size:12px}
+#ct{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;width:48px;height:48px;border-radius:50%;border:1px solid var(--v);background:#1a1030;color:#fff;font-size:20px;cursor:pointer}
+#cw{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:7;width:min(340px,calc(100vw - 32px));max-height:70vh;display:none;flex-direction:column;background:#14151a;border:1px solid var(--v);border-radius:22px;overflow:hidden}
+#cw.o{display:flex}#cw header{position:static;padding:12px 14px;font:700 13px Unbounded;border-bottom:1px solid #ffffff22}
+#ms{padding:14px;overflow:auto;display:flex;flex-direction:column;gap:8px;min-height:160px;font-size:14px}
+.b,.u{padding:9px 12px;max-width:88%;border-radius:16px}.b{background:#8b3dff30;align-self:flex-start;border-bottom-left-radius:4px}.u{background:#2f5bff40;align-self:flex-end;border-bottom-right-radius:4px}
+#cf{display:flex;border-top:1px solid #ffffff22}#cf input{flex:1;background:none;border:0;color:#fff;padding:12px;font:inherit}
+#cf button{background:var(--v);color:var(--lemon);border:0;padding:0 14px;cursor:pointer;font:inherit;font-weight:700}
+
+@media(max-width:760px){
+  .route{grid-template-columns:1fr;border-left:1px dashed #ffffff44;gap:24px;padding-left:24px}.route li{border-top:0;padding-top:0}.route li::before{top:0;left:-40px}.logo{font-size:17px}
+  .cards,#G1{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:20px;gap:12px;padding:6px 20px 16px;margin:0 -20px;-webkit-overflow-scrolling:touch}
+  .cards::-webkit-scrollbar{display:none}
+  .cards > div{flex:0 0 min(82vw,300px);scroll-snap-align:start}
+  #G1 > div{flex:0 0 min(78vw,270px)}
+  .hint{display:block}
+}
+.hint{display:none;color:var(--mu);font-size:12px;margin:-4px 0 0}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.meta{display:flex;justify-content:space-between;gap:12px;font:500 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:.18em;color:var(--mu);border-bottom:1px solid #ffffff26;padding-bottom:14px;margin-bottom:56px}
+.holo{position:absolute;inset:0;pointer-events:none;background:conic-gradient(from 200deg at 72% 42%,#ff7ad94d,#ffd23f33,#3ef2c04d,#2f5bff4d,#8b3dff4d,#ff7ad94d);filter:blur(46px);opacity:.6;-webkit-mask-image:radial-gradient(closest-side at 72% 42%,#000 25%,transparent 78%);mask-image:radial-gradient(closest-side at 72% 42%,#000 25%,transparent 78%)}
+.big{font:700 clamp(54px,17vw,220px)/.9 Unbounded,"Arial Black",sans-serif;letter-spacing:-.05em;margin:48px 0 0;user-select:none;color:transparent;-webkit-text-stroke:1px #ffffff2a;background:linear-gradient(100deg,#ffffff14,#ff7ad940,#ffd23f33,#3ef2c040,#2f5bff40);-webkit-background-clip:text;background-clip:text}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}.rv.in{opacity:1;transform:none}
+.mail{display:inline-block;margin-right:18px;color:var(--lemon);text-decoration:underline;text-underline-offset:4px}
+::selection{background:var(--v);color:#fff}
+.btn-ghost{background:transparent;color:var(--tx);border:1px solid #ffffff44;box-shadow:none}.btn-ghost:hover{background:#ffffff10;box-shadow:none}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+.btn-sm+.btn-sm{margin-top:8px}
+.rec{align-self:flex-start;background:var(--m);color:#fff;font:700 10px Unbounded,sans-serif;padding:5px 10px;border-radius:999px;letter-spacing:.04em}
+.tl{color:var(--mu);font-size:13px;line-height:1.4;min-height:2.8em}
+.sl{font-size:13px;color:var(--mu);line-height:1.4}.sl b{color:var(--tx);font-weight:600}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #ffffff22;border-radius:20px;background:#ffffff05}
+.tw:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.tw table{border-collapse:separate;border-spacing:0;width:100%;min-width:780px;font-size:14px}
+.tw th,.tw td{padding:12px 14px;border-bottom:1px solid #ffffff14;text-align:left;vertical-align:top;line-height:1.4}
+.tw thead th{font:700 13px Unbounded,sans-serif;color:var(--g)}
+.tw tbody th{font-weight:500;color:var(--mu);min-width:220px}
+.tw thead th:first-child,.tw tbody th{position:sticky;left:0;z-index:1;background:#13141b}
+.tw td.c{text-align:center;color:var(--g);font-size:17px}.tw td.c span[data-a=ninc]{color:var(--mu)}
+.tw td.kp{font-size:12.5px;color:var(--mu)}
+.tw tbody tr:last-child th,.tw tbody tr:last-child td{border-bottom:0}
+#ce{position:fixed;right:16px;bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:6;width:48px;height:48px;border-radius:50%;border:1px solid var(--v);background:#1a1030;color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;text-decoration:none}
+#cw{bottom:calc(132px + env(safe-area-inset-bottom,0px))}
+@media(max-width:760px){.tw tbody th{min-width:140px;max-width:150px}.tw thead th:first-child{min-width:140px}}
+</style>
+</head>
+<body>
+<header><div class="w"><span class="logo">Flow<b>Ops</b></span><span class="badge">UA demo</span>
+<div class="lang" role="group" aria-label="Language"><button data-l="1">NL</button><button data-l="2">DE</button><button data-l="0">EN</button></div></div></header>
+
+<section class="hero"><div class="holo" aria-hidden="true"></div><canvas class="net" data-net="h" aria-hidden="true"></canvas><div class="w">
+<div class="meta"><span>FlowOps — AI Systems</span><span data-t="loc"></span></div>
+<div class="eb">FLOWOPS_//AI</div>
+<h1 data-t="h1"></h1><p class="sub" data-t="sub"></p><div class="tags" data-t="tags"></div>
+<div class="ctr row" style="margin:40px 0 0"><a class="btn wa" href="#" data-t="cta"></a><a class="btn btn-ghost em" href="#" data-t="mail"></a></div><div class="bar" aria-hidden="true"></div></div></section>
+
+<canvas class="wv" data-net="d" aria-hidden="true"></canvas>
+<section class="sec"><div class="w">
+<h2 data-t="pt"></h2>
+<div class="cards"><div class="pain" data-t="p1"></div><div class="pain" data-t="p2"></div><div class="pain" data-t="p3"></div><div class="pain" data-t="p4"></div><div class="pain" data-t="p5"></div></div>
+<div class="sol"><h3 data-t="st"></h3><span data-t="sx"></span></div></div></section>
+
+<canvas class="wv" data-net="d" aria-hidden="true"></canvas>
+<section class="sec" id="route"><div class="w">
+<h2 data-t="rt"></h2>
+<ol class="route">
+  <li data-n="1"><b data-t="s1t"></b><span data-t="s1"></span></li>
+  <li data-n="2"><b data-t="s2t"></b><span data-t="s2"></span></li>
+  <li data-n="3"><b data-t="s3t"></b><span data-t="s3"></span></li>
+  <li data-n="4"><b data-t="s4t"></b><span data-t="s4"></span></li>
+</ol>
+<div class="ctr row"><a class="btn wa" href="#" data-t="cta"></a><a class="btn btn-ghost em" href="#" data-t="mail"></a></div>
+<h3 class="g" data-t="g1"></h3><div class="cards" id="G1"></div><h3 class="g" data-t="tt"></h3><div class="tw" tabindex="0" role="region" data-a="tt"><table><thead><tr><th scope="col"></th><th scope="col" data-t="tn1"></th><th scope="col" data-t="tn2"></th><th scope="col" data-t="tn3"></th></tr></thead><tbody><tr><th scope="row" data-t="tr1"></th><td><span data-num="799"></span></td><td><span data-num="799"></span></td><td><span data-num="1499"></span></td></tr><tr><th scope="row" data-t="tr2"></th><td><span data-num="149"></span></td><td><span data-num="249"></span></td><td><span data-num="349"></span></td></tr><tr><th scope="row" data-t="tr3"></th><td><span data-num="948"></span></td><td><span data-num="1048"></span></td><td><span data-num="1848"></span></td></tr><tr><th scope="row" data-t="tr4"></th><td><span data-u="1000"></span></td><td><span data-u="1000"></span></td><td><span data-u="1000"></span></td></tr><tr><th scope="row" data-t="tr5"></th><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr6"></th><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr7"></th><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr8"></th><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr9"></th><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr10"></th><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="inc">✓</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr11"></th><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr12"></th><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr13"></th><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr14"></th><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr15"></th><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="ninc">—</span></td><td class="c"><span role="img" data-a="inc">✓</span></td></tr><tr><th scope="row" data-t="tr16"></th><td class="kp" data-t="k1"></td><td class="kp" data-t="k2"></td><td class="kp" data-t="k3"></td></tr></tbody></table></div><p class="note" data-t="roi"></p><p class="note" data-t="n1"></p>
+<h3 class="g" data-t="g2"></h3><div class="cards" id="G2"></div>
+<h3 class="g" data-t="g3"></h3><div class="cards" id="G3"></div>
+<p class="note" data-t="vat"></p></div></section>
+
+<canvas class="wv" data-net="d" aria-hidden="true"></canvas>
+<footer><div class="w">© FlowOps · <span data-t="loc">Based in Noord-Brabant, NL</span><br><span data-t="kvk">KvK-nummer: 84920481</span> · <span data-t="vat"></span><br><br><a class="mail wa" href="#">WhatsApp</a><a class="mail em" href="#" data-t="mail"></a><div class="big" aria-hidden="true">FlowOps</div></div></footer>
+
+<a id="cta" class="btn wa" href="#" data-t="cta"></a>
+<a id="ce" class="em" href="#" data-a="mail">✉</a>
+<button id="ct" aria-label="Chat" aria-expanded="false">💬</button>
+<div id="cw" role="dialog" aria-label="AI"><header data-t="ch"></header><div id="ms" aria-live="polite"></div>
+<form id="cf"><input id="ci" data-p="ph" aria-label="Message" autocomplete="off"><button data-t="sd"></button></form></div>
+
+<script>
+const L=['en','nl','de','ua'];
+const T={
+"h1": [
+"Automate routine. Turn more requests into orders.",
+"Automatiseer routine. Zet meer aanvragen om in orders.",
+"Routine automatisieren. Mehr Anfragen in Aufträge verwandeln.",
+"Автоматизуйте рутину. Перетворюйте більше заявок на замовлення."
+],
+"sub": [
+"An AI assistant on your website and in WhatsApp answers customers in seconds, 24/7, calculates prices in the chat and hands complex questions to your manager. Live in 48 hours, first KPI report after 14 days.",
+"Een AI-assistent op uw website en in WhatsApp antwoordt klanten binnen seconden, 24/7, berekent prijzen in de chat en draagt complexe vragen over aan uw medewerker. Live binnen 48 uur, eerste KPI-rapport na 14 dagen.",
+"Ein KI-Assistent auf Ihrer Website und in WhatsApp antwortet Kunden in Sekunden, rund um die Uhr, berechnet Preise im Chat und übergibt komplexe Fragen an Ihren Mitarbeiter. Live in 48 Stunden, erster KPI-Bericht nach 14 Tagen.",
+"AI-асистент на вашому сайті та у WhatsApp відповідає клієнтам за секунди, 24/7, рахує ціну в чаті та передає складні питання вашому менеджеру. Запуск за 48 годин, перший KPI-звіт через 14 днів."
+],
+"tags": [
+"24/7 replies · NL / DE / EN · Handover to a live manager · Tailored to your business",
+"24/7 antwoord · NL / DE / EN · Overdracht aan een medewerker · Op maat van uw bedrijf",
+"24/7-Antworten · NL / DE / EN · Übergabe an einen Mitarbeiter · Individuell auf Ihr Unternehmen zugeschnitten",
+"Відповіді 24/7 · NL / DE / EN · Передача живому менеджеру · Під ваш бізнес"
+],
+"cta": [
+"Get a free demo",
+"Gratis demo aanvragen",
+"Kostenlose Demo anfordern",
+"Отримати безкоштовне демо"
+],
+"ob": [
+"Order Now",
+"Bestel Nu",
+"Jetzt Bestellen",
+"Замовити зараз"
+],
+"pt": [
+"Where your business loses requests and money",
+"Waar uw bedrijf aanvragen en geld verliest",
+"Wo Ihr Unternehmen Anfragen und Geld verliert",
+"Де ваш бізнес втрачає заявки та гроші"
+],
+"p1": [
+"Requests outside working hours wait until morning, while the customer writes to a competitor who replies at once.",
+"Aanvragen buiten kantooruren blijven tot de ochtend liggen, terwijl de klant al schrijft naar een concurrent die direct antwoordt.",
+"Anfragen außerhalb der Arbeitszeit bleiben bis zum Morgen liegen, während der Kunde einem Wettbewerber schreibt, der sofort antwortet.",
+"Заявки поза робочим часом чекають до ранку, а клієнт тим часом пише конкуренту, який відповідає одразу."
+],
+"p2": [
+"Managers answer late: price questions and order confirmations wait until someone is free, and the buyer loses interest.",
+"Medewerkers reageren laat: prijsvragen en orderbevestigingen wachten tot iemand tijd heeft en de koper haakt af.",
+"Mitarbeiter antworten spät: Preisfragen und Bestellbestätigungen warten, bis jemand Zeit hat, und der Käufer verliert das Interesse.",
+"Менеджери відповідають із запізненням: питання про ціну та підтвердження замовлення чекають, поки хтось звільниться, і покупець остигає."
+],
+"p3": [
+"Every quote is calculated by hand: each price request takes manager time and slows the sale down.",
+"Elke offerte wordt handmatig berekend: elke prijsvraag kost tijd van een medewerker en vertraagt de verkoop.",
+"Jedes Angebot wird von Hand kalkuliert: Jede Preisanfrage bindet Mitarbeiterzeit und bremst den Verkauf.",
+"Кожен розрахунок робиться вручну: кожен запит про ціну забирає час менеджера й гальмує продаж."
+],
+"p4": [
+"Support answers the same questions again and again: expensive manual work that an assistant can do.",
+"Support beantwoordt steeds dezelfde vragen: dure handmatige arbeid die een assistent kan overnemen.",
+"Der Support beantwortet immer wieder dieselben Fragen: teure Handarbeit, die ein Assistent übernehmen kann.",
+"Підтримка знову і знову відповідає на одні й ті самі питання: дорога ручна праця, яку може взяти на себе асистент."
+],
+"p5": [
+"The website offers only a contact form, so visitors who do not want to wait for an email leave without writing.",
+"De website biedt alleen een contactformulier, dus bezoekers die niet op een e-mail willen wachten vertrekken zonder te schrijven.",
+"Die Website bietet nur ein Kontaktformular, daher gehen Besucher, die nicht auf eine E-Mail warten wollen, ohne zu schreiben.",
+"На сайті є лише контактна форма, тому відвідувачі, які не хочуть чекати на лист, йдуть, не написавши."
+],
+"st": [
+"The solution: AI takes the routine, your team closes the deals",
+"De oplossing: AI neemt de routine over, uw team sluit de deals",
+"Die Lösung: KI übernimmt die Routine, Ihr Team schließt die Abschlüsse",
+"Рішення: AI бере на себе рутину, ваша команда закриває угоди"
+],
+"sx": [
+"FlowOps sets up an AI assistant for your website and WhatsApp. It replies in seconds at any hour, calculates prices in the dialogue, qualifies the lead and hands complex questions to a live manager. It is trained on your knowledge base and tailored to your business.",
+"FlowOps richt een AI-assistent in voor uw website en WhatsApp. Hij antwoordt op elk uur binnen seconden, berekent prijzen in het gesprek, kwalificeert de lead en draagt complexe vragen over aan een medewerker. De assistent wordt getraind op uw kennisbank en op maat van uw bedrijf ingericht.",
+"FlowOps richtet einen KI-Assistenten für Ihre Website und WhatsApp ein. Er antwortet zu jeder Uhrzeit in Sekunden, berechnet Preise im Dialog, qualifiziert den Lead und übergibt komplexe Fragen an einen Mitarbeiter. Er wird mit Ihrer Wissensbasis trainiert und individuell auf Ihr Unternehmen zugeschnitten.",
+"FlowOps налаштовує AI-асистента для вашого сайту та WhatsApp. Він відповідає за секунди в будь-який час, рахує ціну в діалозі, кваліфікує лід і передає складні питання живому менеджеру. Його навчають на вашій базі знань і налаштовують під ваш бізнес."
+],
+"rt": [
+"From request to a working assistant",
+"Van aanvraag naar werkende assistent",
+"Von der Anfrage zum funktionierenden Assistenten",
+"Від заявки до працюючого асистента"
+],
+"s1t": [
+"Request a demo",
+"Vraag een demo aan",
+"Demo anfragen",
+"Залишаєте заявку на демо"
+],
+"s1": [
+"Write to us on WhatsApp which routine costs your team the most time.",
+"Stuur ons via WhatsApp welke routine uw team de meeste tijd kost.",
+"Schreiben Sie uns per WhatsApp, welche Routine Ihr Team am meisten Zeit kostet.",
+"Пишете нам у WhatsApp, яка рутина забирає в команди найбільше часу."
+],
+"s2t": [
+"Get a plan",
+"Ontvang een plan",
+"Plan erhalten",
+"Отримуєте план"
+],
+"s2": [
+"A manager proposes a package. You see the setup fee, the monthly price and the dialogue limit before you pay.",
+"Een medewerker stelt een pakket voor. U ziet de setupkosten, de maandprijs en de gesprekslimiet voordat u betaalt.",
+"Ein Manager schlägt ein Paket vor. Sie sehen Einrichtungsgebühr, Monatspreis und Dialoglimit, bevor Sie zahlen.",
+"Менеджер пропонує пакет. Ви бачите вартість налаштування, щомісячну ціну та ліміт діалогів до оплати."
+],
+"s3t": [
+"Approve details",
+"Keur details goed",
+"Details freigeben",
+"Затверджуєте деталі"
+],
+"s3": [
+"We train the assistant on your knowledge base and adjust logic and design to your brand.",
+"We trainen de assistent op uw kennisbank en stemmen logica en design af op uw huisstijl.",
+"Wir trainieren den Assistenten mit Ihrer Wissensbasis und passen Logik und Design an Ihre Marke an.",
+"Навчаємо асистента на вашій базі знань і налаштовуємо логіку та оформлення під ваш бренд."
+],
+"s4t": [
+"Go live",
+"Start direct",
+"Direkt starten",
+"Запускаєте в роботу"
+],
+"s4": [
+"Pay and start: AI tools are ready in 48 hours, physical NFC stands for the Review Booster arrive in 5–10 days. You get a KPI report after 14 days.",
+"Betaal en start: AI-tools zijn klaar binnen 48 uur, fysieke NFC-standaards voor de Review Booster binnen 5–10 dagen. Na 14 dagen ontvangt u een KPI-rapport.",
+"Zahlen und starten: KI-Tools sind in 48 Stunden bereit, physische NFC-Aufsteller für den Review Booster in 5–10 Tagen. Nach 14 Tagen erhalten Sie einen KPI-Bericht.",
+"Оплачуєте й стартуєте: AI-інструменти готові за 48 годин, фізичні NFC-стійки для Review Booster доставляємо за 5–10 днів. Через 14 днів ви отримуєте KPI-звіт."
+],
+"g1": [
+"Choose a package (setup + monthly subscription)",
+"Kies een pakket (setup + maandabonnement)",
+"Paket wählen (Einrichtung + Monatsabo)",
+"Оберіть пакет (налаштування + щомісячна підписка)"
+],
+"g2": [
+"Add-ons for any package",
+"Add-ons bij elk pakket",
+"Zusatzmodule für jedes Paket",
+"Додатки до будь-якого пакета"
+],
+"g3": [
+"One-time diagnostics",
+"Eenmalige diagnose",
+"Einmalige Diagnose",
+"Разова діагностика"
+],
+"mo": [
+"/mo",
+"/mnd",
+"/Monat",
+"/міс"
+],
+"ot": [
+"one-time purchase",
+"eenmalige aankoop",
+"Einmalkauf",
+"разова покупка"
+],
+"from": [
+"from",
+"vanaf",
+"ab",
+"від"
+],
+"n1": [
+"Setup fee covers launch and training of the assistant. Every package includes up to 1,000 dialogues per month; dialogues above the limit are billed separately. The assistant is multilingual and answers in the customer’s language.",
+"De setupkosten dekken de lancering en training van de assistent. Elk pakket bevat tot 1.000 gesprekken per maand; gesprekken boven de limiet worden apart gefactureerd. De assistent is meertalig en antwoordt in de taal van de klant.",
+"Die Einrichtungsgebühr deckt Start und Training des Assistenten ab. Jedes Paket enthält bis zu 1.000 Dialoge pro Monat; Dialoge über dem Limit werden separat berechnet. Der Assistent ist mehrsprachig und antwortet in der Sprache des Kunden.",
+"Вартість налаштування покриває запуск і навчання асистента. У кожному пакеті до 1 000 діалогів на місяць; діалоги понад ліміт тарифікуються окремо. Асистент мультимовний і відповідає мовою клієнта."
+],
+"r0": [
+"Custom development tailored to your business specifics",
+"Maatwerkontwikkeling afgestemd op uw bedrijf",
+"Individuelle Entwicklung abgestimmt auf Ihr Unternehmen",
+"Індивідуальна розробка під особливості вашого бізнесу"
+],
+"r1": [
+"Branded NFC stand with QR code: Google review in one tap",
+"NFC-standaard met QR-code en uw branding: Google-review met één tik",
+"NFC-Aufsteller mit QR-Code im Branding: Google-Bewertung mit einem Tipp",
+"Брендована NFC-стійка з QR-кодом: відгук у Google в один дотик"
+],
+"r2": [
+"Rating protection: 4–5★ go public on Google, 1–3★ go privately to your manager",
+"Beoordelingsbescherming: 4–5★ gaan naar Google, 1–3★ privé naar de manager",
+"Bewertungsschutz: 4–5★ gehen zu Google, 1–3★ privat an den Manager",
+"Захист рейтингу: 4–5★ публікуються в Google, а 1–3★ йдуть особисто менеджеру"
+],
+"r3": [
+"FlowOps dashboard: tap analytics, growth trends & link management",
+"FlowOps-dashboard: scanstatistieken, groeitrends & linkbeheer",
+"FlowOps-Dashboard: Scan-Analysen, Wachstumstrends & Link-Verwaltung",
+"Дашборд FlowOps: аналітика дотиків, динаміка росту та зміна посилань"
+],
+"r4": [
+"Free stand replacement within 12 months",
+"Gratis vervanging van de standaard gedurende 12 maanden",
+"Kostenloser Austausch des Aufstellers innerhalb von 12 Monaten",
+"Безкоштовна заміна стійки протягом 12 місяців"
+],
+"rs": [
+"Starter Kit",
+"Starter Kit",
+"Starter Kit",
+"Starter Kit"
+],
+"wn": [
+"Wheel of fortune",
+"Rad van fortuin",
+"Glücksrad",
+"Колесо фортуни"
+],
+"w1": [
+"Widget in your site style",
+"Widget in de stijl van uw site",
+"Widget im Stil Ihrer Website",
+"Віджет у стилі вашого сайту"
+],
+"w2": [
+"Promo codes for email or phone",
+"Kortingscodes voor e-mail of telefoon",
+"Gutscheine für E-Mail oder Telefon",
+"Промокоди за email або телефон"
+],
+"w3": [
+"Leads go to email or CRM",
+"Leads gaan naar e-mail of CRM",
+"Leads gehen an E-Mail oder CRM",
+"Ліди йдуть на пошту або в CRM"
+],
+"wf": [
+"Support is billed separately: €39/mo. Includes monthly prize updates and monitoring.",
+"Onderhoud wordt apart gefactureerd: € 39/mnd. Inclusief maandelijkse prijsupdate en monitoring.",
+"Wartung wird separat berechnet: 39 €/Monat. Inklusive monatlicher Preis-Updates und Überwachung.",
+"Обслуговування (support) оплачується окремо: 39 €/міс. Включає щомісячне оновлення призів і моніторинг."
+],
+"qn": [
+"AI quiz & lead-gen landing page",
+"AI-quiz en leadgen-landingspagina",
+"KI-Quiz & Lead-Landingpage",
+"AI-квіз і лідогенеруючий лендінг"
+],
+"q1": [
+"Micro landing page, 1–3 screens",
+"Microlanding van 1–3 schermen",
+"Mikro-Landingpage mit 1–3 Screens",
+"Мікро-лендінг на 1–3 екрани"
+],
+"q2": [
+"3–5 question quiz filters weak leads",
+"Quiz van 3–5 vragen filtert zwakke leads",
+"Quiz mit 3–5 Fragen filtert schwache Leads",
+"Квіз із 3–5 питань відсіює нецільових лідів"
+],
+"q3": [
+"Instant alerts: Telegram, WhatsApp, email",
+"Directe meldingen: Telegram, WhatsApp, e-mail",
+"Sofort-Meldungen: Telegram, WhatsApp, E-Mail",
+"Миттєві сповіщення: Telegram, WhatsApp, email"
+],
+"qf": [
+"Hosting, SSL and support are billed separately: €49/mo.",
+"Hosting, SSL en onderhoud apart: € 49/mnd.",
+"Hosting, SSL und Wartung separat: 49 €/Monat.",
+"Хостинг, SSL і обслуговування (support) оплачуються окремо: 49 €/міс."
+],
+"cn": [
+"Interactive service calculator",
+"Interactieve dienstencalculator",
+"Interaktiver Leistungsrechner",
+"Інтерактивний калькулятор послуг"
+],
+"c1": [
+"Your price list as an interactive quote",
+"Uw prijslijst als interactieve berekening",
+"Ihre Preisliste als interaktive Kalkulation",
+"Ваш прайс як інтерактивний розрахунок"
+],
+"c2": [
+"Installs on WordPress, Wix, Webflow and more",
+"Te installeren op WordPress, Wix, Webflow en meer",
+"Einbindung in WordPress, Wix, Webflow u. a.",
+"Установка на WordPress, Wix, Webflow та інші"
+],
+"c3": [
+"Quote goes to client email and manager CRM",
+"Offerte naar klant en CRM van de manager",
+"Angebot geht an Kunden und CRM des Managers",
+"Кошторис іде клієнту на пошту й менеджеру в CRM"
+],
+"cf": [
+"The monthly fee includes a monthly check of formulas and prices.",
+"In de maandprijs zit een maandelijkse controle van formules en prijzen.",
+"Die monatliche Gebühr enthält eine monatliche Prüfung von Formeln und Preisen.",
+"Щомісячна плата включає щомісячну перевірку формул і цін."
+],
+"an": [
+"Competitor analysis & AI niche audit",
+"Concurrentieanalyse en AI-nicheaudit",
+"Wettbewerbsanalyse & KI-Nischenaudit",
+"Аналітика конкурентів і AI-аудит ніші"
+],
+"a1": [
+"10–15 page report on top-5 local competitors",
+"Rapport van 10–15 pagina’s over de top-5 concurrenten in uw regio",
+"Bericht mit 10–15 Seiten über die Top-5-Wettbewerber Ihrer Region",
+"Звіт на 10–15 сторінок по топ-5 конкурентам у вашому регіоні"
+],
+"a2": [
+"Weak spots in search, social and service",
+"Zwakke plekken in zoeken, social en service",
+"Schwächen in Suche, Social Media und Service",
+"Слабкі місця в пошуку, соцмережах і сервісі"
+],
+"a3": [
+"30-day plan to adopt FlowOps AI tools",
+"30-dagenplan voor FlowOps AI-tools",
+"30-Tage-Plan zur Einführung der FlowOps-KI-Tools",
+"План впровадження ШІ-інструментів FlowOps на 30 днів"
+],
+"af": [
+"No subscription fee.",
+"Geen abonnementskosten.",
+"Keine monatliche Gebühr.",
+"Без абонентської плати."
+],
+"vat": [
+"All prices in euros. VAT is not applied.",
+"Alle prijzen in euro’s. Er wordt geen btw berekend.",
+"Alle Preise in Euro. Es wird keine MwSt. erhoben.",
+"Усі ціни в євро. ПДВ не застосовується."
+],
+"loc": [
+"Based in Noord-Brabant, NL",
+"Gevestigd in Noord-Brabant, NL",
+"Ansässig in Noord-Brabant, NL",
+"Базується в Північному Брабанті, Нідерланди"
+],
+"kvk": [
+"Chamber of Commerce: 84920481",
+"KvK-nummer: 84920481",
+"Handelsregister: 84920481",
+"Торгова палата (KvK): 84920481"
+],
+"ch": [
+"AI consultant",
+"AI-adviseur",
+"KI-Berater",
+"AI-консультант"
+],
+"sd": [
+"Send",
+"Stuur",
+"Senden",
+"Надіслати"
+],
+"ph": [
+"Type here…",
+"Typ hier…",
+"Hier schreiben…",
+"Пишіть тут…"
+],
+"c0": [
+"Hi! I can give you an instant consultation. Which niche is your business in?",
+"Hallo! Ik geef u direct advies. In welke branche werkt uw bedrijf?",
+"Hallo! Ich berate Sie sofort. In welcher Branche ist Ihr Unternehmen tätig?",
+"Вітаю! Дам миттєву консультацію. У якій ніші ваш бізнес?"
+],
+"c1q": [
+"What costs your team the most time: support questions, price quotes or order confirmations?",
+"Wat kost uw team de meeste tijd: supportvragen, prijsoffertes of orderbevestigingen?",
+"Was kostet Ihr Team die meiste Zeit: Support-Fragen, Preisangebote oder Bestellbestätigungen?",
+"Що забирає в команди найбільше часу: питання до підтримки, розрахунки цін чи підтвердження замовлень?"
+],
+"c2q": [
+"How many customer requests do you get per month?",
+"Hoeveel klantaanvragen ontvangt u per maand?",
+"Wie viele Kundenanfragen erhalten Sie pro Monat?",
+"Скільки запитів від клієнтів ви отримуєте на місяць?"
+],
+"c3q": [
+"Which CRM or tool do you use for orders, or none yet?",
+"Welk CRM of welke tool gebruikt u voor orders, of nog geen?",
+"Welches CRM oder Tool nutzen Sie für Bestellungen, oder noch keines?",
+"Яку CRM або інструмент ви використовуєте для замовлень, чи поки жодного?"
+],
+"cd": [
+"Thanks! A live manager takes over: continue in WhatsApp.",
+"Bedankt! Een medewerker neemt het over: ga verder in WhatsApp.",
+"Danke! Ein Mitarbeiter übernimmt: weiter in WhatsApp.",
+"Дякую! Діалог бере живий менеджер: продовжте у WhatsApp."
+],
+"cb": [
+"Continue in WhatsApp",
+"Verder in WhatsApp",
+"Weiter in WhatsApp",
+"Продовжити у WhatsApp"
+],
+"wa": [
+"Hi FlowOps, I want a free demo on my business data.",
+"Hallo FlowOps, ik wil een gratis demo op basis van mijn bedrijfsgegevens.",
+"Hallo FlowOps, ich möchte eine kostenlose Demo mit meinen Unternehmensdaten.",
+"Вітаю, FlowOps! Хочу безкоштовне демо на даних мого бізнесу."
+],
+"su": [
+"setup fee (one-time)",
+"setupkosten (eenmalig)",
+"Einrichtung (einmalig)",
+"налаштування (разово)"
+],
+"fp": [
+"First payment",
+"Eerste betaling",
+"Erste Zahlung",
+"Перший платіж"
+],
+"rec": [
+"Our recommendation",
+"Onze aanbeveling",
+"Unsere Empfehlung",
+"Наша рекомендація"
+],
+"roi": [
+"Payback in hours = monthly price ÷ hourly cost of your employee. That is how many hours of routine the assistant must take over to pay for itself.",
+"Terugverdientijd in uren = maandprijs ÷ uurkosten van uw medewerker. Zoveel uur routine moet de assistent overnemen om zichzelf terug te verdienen.",
+"Amortisation in Stunden = Monatspreis ÷ Stundenkosten Ihres Mitarbeiters. So viele Stunden Routine muss der Assistent übernehmen, um sich zu rechnen.",
+"Окупність у годинах = щомісячна ціна ÷ вартість години вашого співробітника. Стільки годин рутини асистент має забрати на себе, щоб окупити себе."
+],
+"tn1": [
+"Starter",
+"Starter",
+"Starter",
+"Starter"
+],
+"tl1": [
+"AI administrator for website and WhatsApp",
+"AI-assistent voor website en WhatsApp",
+"KI-Assistent für Website und WhatsApp",
+"AI-адміністратор для сайту й WhatsApp"
+],
+"st1": [
+"Support bot on website and WhatsApp in NL, DE and EN",
+"Supportbot op website en WhatsApp in NL, DE en EN",
+"Support-Bot auf Website und WhatsApp in NL, DE und EN",
+"Бот підтримки на сайті й у WhatsApp мовами NL, DE та EN"
+],
+"st2": [
+"Trained on your knowledge base",
+"Getraind op uw kennisbank",
+"Mit Ihrer Wissensbasis trainiert",
+"Навчений на вашій базі знань"
+],
+"st3": [
+"Lead qualification and quick price calculation in the chat",
+"Leadkwalificatie en snelle prijsberekening in de chat",
+"Lead-Qualifizierung und schnelle Preisberechnung im Chat",
+"Кваліфікація ліда й швидкий розрахунок ціни в чаті"
+],
+"st4": [
+"Complex questions go to a live manager",
+"Complexe vragen gaan naar een medewerker",
+"Komplexe Fragen gehen an einen Mitarbeiter",
+"Складні питання передаються живому менеджеру"
+],
+"lim": [
+"Up to 1,000 dialogues per month",
+"Tot 1.000 gesprekken per maand",
+"Bis zu 1.000 Dialoge pro Monat",
+"До 1 000 діалогів на місяць"
+],
+"tn2": [
+"Growth",
+"Growth",
+"Growth",
+"Growth"
+],
+"tl2": [
+"Requests, CRM and reminders",
+"Aanvragen, CRM en herinneringen",
+"Anfragen, CRM und Erinnerungen",
+"Заявки, CRM і нагадування"
+],
+"gr1": [
+"Everything in Starter",
+"Alles uit Starter",
+"Alles aus Starter",
+"Усе зі Starter"
+],
+"gr2": [
+"Lead generation: AI quiz or wheel of fortune, you choose one",
+"Leadgeneratie: AI-quiz of rad van fortuin, u kiest er één",
+"Leadgenerierung: KI-Quiz oder Glücksrad, Sie wählen eines",
+"Лідогенерація: AI-квіз або колесо фортуни на ваш вибір"
+],
+"gr3": [
+"Weak leads are filtered out before they reach your manager",
+"Zwakke leads worden gefilterd voordat ze uw medewerker bereiken",
+"Schwache Leads werden gefiltert, bevor sie Ihren Mitarbeiter erreichen",
+"Слабкі ліди відсіюються ще до того, як дійдуть до менеджера"
+],
+"gr4": [
+"CRM or spreadsheet link, instant alerts via Telegram, WhatsApp or email",
+"Koppeling met CRM of spreadsheets, directe meldingen via Telegram, WhatsApp of e-mail",
+"Anbindung an CRM oder Tabellen, Sofort-Meldungen per Telegram, WhatsApp oder E-Mail",
+"Зв’язка з CRM або таблицями, миттєві сповіщення в Telegram, WhatsApp або email"
+],
+"gr5": [
+"Order tracking in the chat and automatic customer reminders",
+"Orderopvolging in de chat en automatische klantherinneringen",
+"Bestellverfolgung im Chat und automatische Kundenerinnerungen",
+"Відстеження замовлень у чаті та авто-нагадування клієнтам"
+],
+"tn3": [
+"Scale",
+"Scale",
+"Scale",
+"Scale"
+],
+"tl3": [
+"AI sales and marketing department, turnkey",
+"AI-verkoop- en marketingafdeling, turnkey",
+"KI-Vertriebs- und Marketingabteilung, schlüsselfertig",
+"AI-відділ продажів і маркетингу під ключ"
+],
+"sc0": [
+"Everything in Growth",
+"Alles uit Growth",
+"Alles aus Growth",
+"Усе з Growth"
+],
+"sc1": [
+"Autonomous work in WhatsApp, social media and on your website",
+"Zelfstandig actief in WhatsApp, social media en op uw website",
+"Autonome Arbeit in WhatsApp, Social Media und auf Ihrer Website",
+"Автономна робота у WhatsApp, соцмережах і на сайті"
+],
+"sc2": [
+"Calendar booking and deal management in your CRM",
+"Agendaboeking en dealbeheer in uw CRM",
+"Kalenderbuchung und Deal-Management in Ihrem CRM",
+"Запис у календар і керування угодами у вашій CRM"
+],
+"sc3": [
+"Cross-sales from your product range and scenario-based follow-ups",
+"Cross-sells uit uw assortiment en opvolging via scenario’s",
+"Cross-Selling aus Ihrem Sortiment und szenariobasierte Nachfassaktionen",
+"Крос-продажі з вашого асортименту та follow-up за сценаріями"
+],
+"sc4": [
+"Marketing campaigns calculated and executed by AI",
+"Marketingcampagnes die de AI berekent en uitvoert",
+"Marketingkampagnen, die die KI berechnet und ausführt",
+"Розрахунок і виконання маркетингових кампаній силами AI"
+],
+"sc5": [
+"Custom development for your business, up to 5 revisions in setup",
+"Maatwerkontwikkeling voor uw bedrijf, tot 5 aanpassingen in de setup",
+"Individuelle Entwicklung für Ihr Unternehmen, bis zu 5 Änderungen in der Einrichtung",
+"Індивідуальна розробка під ваш бізнес, до 5 правок у налаштуванні"
+],
+"tt": [
+"Compare packages",
+"Pakketten vergelijken",
+"Pakete im Vergleich",
+"Порівняння пакетів"
+],
+"inc": [
+"Included",
+"Inbegrepen",
+"Enthalten",
+"Входить"
+],
+"ninc": [
+"Not included",
+"Niet inbegrepen",
+"Nicht enthalten",
+"Не входить"
+],
+"tr1": [
+"Setup fee (one-time)",
+"Setupkosten (eenmalig)",
+"Einrichtungsgebühr (einmalig)",
+"Вартість налаштування (разово)"
+],
+"tr2": [
+"Monthly subscription",
+"Maandabonnement",
+"Monatliche Gebühr",
+"Щомісячна підписка"
+],
+"tr3": [
+"First payment (setup + first month)",
+"Eerste betaling (setup + eerste maand)",
+"Erste Zahlung (Einrichtung + 1. Monat)",
+"Перший платіж (налаштування + 1-й місяць)"
+],
+"tr4": [
+"Dialogues per month",
+"Gesprekken per maand",
+"Dialoge pro Monat",
+"Діалогів на місяць"
+],
+"tr5": [
+"Support bot on website and WhatsApp (NL, DE, EN)",
+"Supportbot op website en WhatsApp (NL, DE, EN)",
+"Support-Bot auf Website und WhatsApp (NL, DE, EN)",
+"Бот підтримки на сайті й у WhatsApp (NL, DE, EN)"
+],
+"tr6": [
+"Trained on your knowledge base, handover to a live manager",
+"Getraind op uw kennisbank, overdracht aan een medewerker",
+"Mit Ihrer Wissensbasis trainiert, Übergabe an einen Mitarbeiter",
+"Навчання на вашій базі знань, передача живому менеджеру"
+],
+"tr7": [
+"Lead qualification and price calculation in the chat",
+"Leadkwalificatie en prijsberekening in de chat",
+"Lead-Qualifizierung und Preisberechnung im Chat",
+"Кваліфікація ліда й розрахунок ціни в чаті"
+],
+"tr8": [
+"Lead generation: AI quiz or wheel of fortune",
+"Leadgeneratie: AI-quiz of rad van fortuin",
+"Leadgenerierung: KI-Quiz oder Glücksrad",
+"Лідогенерація: AI-квіз або колесо фортуни"
+],
+"tr9": [
+"CRM link and instant alerts to your manager",
+"CRM-koppeling en directe meldingen aan uw medewerker",
+"CRM-Anbindung und Sofort-Meldungen an Ihren Mitarbeiter",
+"Зв’язка з CRM і миттєві сповіщення менеджеру"
+],
+"tr10": [
+"Order tracking and automatic customer reminders",
+"Orderopvolging en automatische klantherinneringen",
+"Bestellverfolgung und automatische Kundenerinnerungen",
+"Відстеження замовлень і авто-нагадування клієнтам"
+],
+"tr11": [
+"Autonomous agent in social media as well",
+"Zelfstandige agent ook in social media",
+"Autonomer Agent auch in Social Media",
+"Автономний агент також у соцмережах"
+],
+"tr12": [
+"Calendar booking and CRM deal management",
+"Agendaboeking en dealbeheer in CRM",
+"Kalenderbuchung und Deal-Management im CRM",
+"Запис у календар і керування угодами в CRM"
+],
+"tr13": [
+"Cross-sales and scenario-based follow-ups",
+"Cross-sells en opvolging via scenario’s",
+"Cross-Selling und szenariobasierte Nachfassaktionen",
+"Крос-продажі та follow-up за сценаріями"
+],
+"tr14": [
+"Marketing campaigns calculated and run by AI",
+"Marketingcampagnes berekend en uitgevoerd door AI",
+"Marketingkampagnen, von der KI berechnet und ausgeführt",
+"Маркетингові кампанії, які AI рахує й виконує"
+],
+"tr15": [
+"Custom development, up to 5 revisions in setup",
+"Maatwerkontwikkeling, tot 5 aanpassingen in de setup",
+"Individuelle Entwicklung, bis zu 5 Änderungen in der Einrichtung",
+"Індивідуальна розробка, до 5 правок у налаштуванні"
+],
+"tr16": [
+"KPIs in your report",
+"KPI’s in uw rapport",
+"KPIs in Ihrem Bericht",
+"KPI у вашому звіті"
+],
+"k1": [
+"First response time, share of dialogues closed without a manager, manager hours saved",
+"Eerste reactietijd, aandeel gesprekken zonder medewerker afgehandeld, bespaarde uren van medewerkers",
+"Erste Antwortzeit, Anteil der Dialoge ohne Mitarbeiter, eingesparte Mitarbeiterstunden",
+"Час першої відповіді, частка діалогів без менеджера, звільнені години менеджера"
+],
+"k2": [
+"Plus share of requests answered within 1 minute and request-to-deal conversion, measured before launch and after 30 days",
+"Plus aandeel aanvragen binnen 1 minuut beantwoord en conversie van aanvraag naar deal, gemeten voor de lancering en na 30 dagen",
+"Zusätzlich Anteil der Anfragen mit Antwort innerhalb von 1 Minute und Conversion von Anfrage zu Abschluss, gemessen vor dem Start und nach 30 Tagen",
+"Додатково: частка заявок із відповіддю протягом 1 хвилини та конверсія заявка → угода, виміряні до запуску і через 30 днів"
+],
+"k3": [
+"Plus average order value (before launch and after 30 days), share of deals with a cross-sale, time from first question to confirmed order",
+"Plus gemiddelde orderwaarde (voor de lancering en na 30 dagen), aandeel deals met cross-sell, tijd van eerste vraag tot bevestigde order",
+"Zusätzlich durchschnittlicher Bestellwert (vor dem Start und nach 30 Tagen), Anteil der Abschlüsse mit Cross-Selling, Zeit von der ersten Frage bis zur bestätigten Bestellung",
+"Додатково: середній чек (до запуску і через 30 днів), частка угод із крос-продажем, час від першого питання до підтвердженого замовлення"
+],
+"mail": [
+"E-mail us",
+"E-mail ons",
+"Per E-Mail schreiben",
+"Написати на пошту"
+],
+"upto": [
+"up to ",
+"tot ",
+"bis zu ",
+"до "
+]
+};
+const EMAIL='caribian.fox@gmail.com';
+const NF=['en','nl','de','uk'],fmt=n=>new Intl.NumberFormat(NF[lg]).format(n);
+const mailto=(sub,body)=>'mailto:'+EMAIL+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body);
+function mailSet(){
+  document.querySelectorAll('a.em').forEach(a=>{a.href=mailto('FlowOps',T.wa[lg])});
+  document.querySelectorAll('a.oe').forEach(a=>{a.href=mailto('FlowOps: '+a.dataset.o,OT[lg].replace('%',a.dataset.o))});
+}
+const OT=['Hi FlowOps, I want to order "%".','Hallo FlowOps, ik wil "%" bestellen.','Hallo FlowOps, ich möchte "%" bestellen.','Вітаю, FlowOps! Я хочу замовити "%".'];
+const NUM='380991280302',link=t=>'https://wa.me/'+NUM+'?text='+encodeURIComponent(t);
+const btns=n=>'<a class="btn btn-sm ob" href="#" data-o="'+n+'" data-t="ob"></a><a class="btn btn-sm btn-ghost oe" href="#" data-o="'+n+'" data-t="mail"></a>';
+const card=(c,h,p,ls,f,n)=>'<div class="card-wrapper"><div class="card '+c+'"><h4>'+h+'</h4><div class="pr">'+p+'</div>'+ls.map(k=>'<p data-t="'+k+'"></p>').join('')+btns(n)+'</div>'+(f?'<p class="fn" data-t="'+f+'"></p>':'')+'</div>';
+const tariff=(c,i,n,price,setup,first,ls,rec)=>'<div class="card-wrapper"><div class="card '+c+'">'+(rec?'<span class="rec" data-t="rec"></span>':'')+'<h4 data-t="tn'+i+'"></h4><div class="tl" data-t="tl'+i+'"></div><div class="pr"><span data-num="'+price+'"></span><small data-t="mo"></small></div><div class="sl">+ <b data-num="'+setup+'"></b> <span data-t="su"></span></div><div class="sl"><span data-t="fp"></span>: <b data-num="'+first+'"></b></div>'+ls.concat('lim').map(k=>'<p data-t="'+k+'"></p>').join('')+btns(n)+'</div></div>';
+
+G1.innerHTML=[
+  tariff('t1',1,'Starter',149,799,948,['st1','st2','st3','st4'],false),
+  tariff('t1 t1-ag',2,'Growth',249,799,1048,['gr1','gr2','gr3','gr4','gr5'],true),
+  tariff('t1',3,'Scale',349,1499,1848,['sc0','sc1','sc2','sc3','sc4','sc5'],false)
+].join('');
+
+G2.innerHTML=
+  card('t2','<span data-t="cn"></span>','499 € <small data-t="su"></small><br>+ 29 €<small data-t="mo"></small>',['c1','c2','c3'],'cf','Interactive Service Calculator')+
+  card('t2','Google Review Booster','<small data-t="from"></small>60 € <small data-t="rs"></small><br>+ 20 €<small data-t="mo"></small>',['r0','r1','r2','r3','r4'],false,'Google Review Booster');
+
+G3.innerHTML=card('t3','<span data-t="an"></span>','399 €<br><span class="once" data-t="ot"></span>',['a1','a2','a3'],'af','Competitor Analysis & AI Audit');
+
+let lg=1,step=0,ans=[];
+function ap(){document.documentElement.lang=L[lg];
+document.querySelectorAll('[data-t]').forEach(e=>{const v=T[e.dataset.t];e.textContent=v?v[lg]:''});
+document.querySelectorAll('[data-p]').forEach(e=>e.placeholder=T[e.dataset.p][lg]);
+document.querySelectorAll('[data-a]').forEach(e=>e.setAttribute('aria-label',T[e.dataset.a][lg]));
+document.querySelectorAll('[data-num]').forEach(e=>e.textContent=fmt(+e.dataset.num)+'\u00a0€');
+document.querySelectorAll('[data-u]').forEach(e=>e.textContent=T.upto[lg]+fmt(+e.dataset.u));
+document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.l===lg));
+document.querySelectorAll('a.wa').forEach(a=>{a.href=link(T.wa[lg]);a.target='_blank';a.rel='noopener'});
+document.querySelectorAll('a.ob').forEach(a=>{a.href=link(OT[lg].replace('%',a.dataset.o));a.target='_blank';a.rel='noopener'});
+mailSet();}
+function route(){const u=location.hash==='#ua';document.body.classList.toggle('ua',u);if(u)lg=3;else if(lg===3)lg=1;ap();}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{lg=+b.dataset.l;ap()});
+addEventListener('hashchange',route);route();
+const ms=document.getElementById('ms'),qs=['c0','c1q','c2q','c3q'];
+function say(t,c){const d=document.createElement('div');d.className=c;d.textContent=t;ms.appendChild(d);ms.scrollTop=ms.scrollHeight;return d}
+ct.onclick=()=>{const o=cw.classList.toggle('o');ct.setAttribute('aria-expanded',o);if(o&&!ms.children.length)say(T.c0[lg],'b');if(o)ci.focus()};
+cf.onsubmit=e=>{e.preventDefault();const v=ci.value.trim();if(!v||step>3)return;say(v,'u');ans.push(v);ci.value='';step++;
+if(step<4)say(T[qs[step]][lg],'b');else{say(T.cd[lg],'b');const a=document.createElement('a');a.className='btn';a.style.cssText='font-size:12px;padding:12px 16px;margin:4px 0';a.textContent=T.cb[lg];
+a.href=link(T.wa[lg]+'\n1) '+ans[0]+'\n2) '+ans[1]+'\n3) '+ans[2]+'\n4) '+ans[3]);a.target='_blank';a.rel='noopener';ms.appendChild(a);{const e2=document.createElement('a');e2.className='btn btn-ghost';e2.style.cssText='font-size:12px;padding:12px 16px;margin:4px 0';e2.href='mailto:'+EMAIL+'?subject=FlowOps&body='+encodeURIComponent(decodeURIComponent(a.href.split('text=')[1]));e2.textContent=T.mail[lg];ms.appendChild(e2)}ms.scrollTop=ms.scrollHeight}};
+
+(function(){
+const COL=['139,61,255','225,29,137','62,242,192','47,91,255','150,210,255'],R=120;
+function mk(cv,idx){
+const hero=cv.dataset.net==='h',host=hero?cv.parentElement:cv,cx=cv.getContext('2d');
+let W=0,H=0,dpr=1,N=[],S=[],B=[],mx=-999,my=-999,raf=0,s=7+idx*13;
+const r=()=>(s=s*16807%2147483647)/2147483647;
+const nd=(x,y,rd,c)=>{const n={x,y,r:rd,c,g:0};N.push(n);return n};
+const sg=(a,b,k)=>{S.push({a,b,cx:(a.x+b.x)/2-(b.y-a.y)*k,cy:(a.y+b.y)/2+(b.x-a.x)*k})};
+function grow(a,ang,len,d,c){const x=a.x+Math.cos(ang)*len,y=a.y+Math.sin(ang)*len;if(x<-30||x>W+30||y<-30||y>H+30)return;const b=nd(x,y,d>0?1.6:2.3,c);sg(a,b,(r()-.5)*.5);if(d<2)for(let k=0;k<2;k++)grow(b,ang+(k?1:-1)*(.35+r()*.55),len*(.68+r()*.16),d+1,c)}
+function build(){
+N=[];S=[];B=[];s=7+idx*13;
+const m=W<760,x0=hero?(m?W*.08:W*.42):0,span=W-x0-24,l=hero?Math.max(40,Math.min(W,H)/7):H*.4,so=[],n=hero?7:Math.max(2,Math.round(W/360));
+for(let i=0;i<n;i++){
+const x=hero?x0+span*((i%3+r())/3):W*((i+.2+.6*r())/n),y=hero?H*((Math.floor(i/3)+.3+.4*r())/3):H*(.3+.4*r());
+const c=i%4,a=nd(x,y,hero?6:4.5,c),k=4+(r()*2|0);so.push(a);
+for(let j=0;j<k;j++)grow(a,j/k*6.283+r(),l*(.7+r()*.5),0,c)}
+for(let i=1;i<so.length;i++)sg(so[i-1],so[i],.18*(i%2?1:-1));
+const cn=hero?7:Math.max(2,Math.round(W/420));
+for(let i=0;i<cn;i++){
+let x=hero?x0+span*r():W*r(),y=hero?H*(.05+.9*r()):H*(.2+.6*r()),dx=r()<.5?-1:1,dy=r()<.5?-1:1;const u=hero?1:.4,c=(i+1)%4;let p=nd(x,y,3.2,c);
+for(const t of 'HDVDHDV'){
+const L=(70+r()*130)*(hero?1:1.2),ch=(24+r()*30)*u,V=(50+r()*110)*u;
+if(t==='H')x+=dx*L;else if(t==='D'){x+=dx*ch;y+=dy*ch}else{y+=dy*V;dy=-dy}
+if(x<6||x>W-6||y<6||y>H-6)break;
+const q=nd(x,y,1.7,c);sg(p,q,0);p=q}
+p.r=3.2}
+if(hero){for(let i=0;i<12;i++)B.push({x:x0+span*r(),y:H*r(),r:18+r()*40,c:i%5});
+const P=[];for(let i=0;i<(m?14:30);i++)P.push(nd(x0+span*r(),H*(.04+.92*r()),1.7,4));
+for(const a of P){const o=P.filter(b=>b!==a).sort((u,v)=>Math.hypot(u.x-a.x,u.y-a.y)-Math.hypot(v.x-a.x,v.y-a.y)).slice(0,2);for(const b of o)sg(a,b,0)}}}
+function draw(){
+cx.setTransform(dpr,0,0,dpr,0,0);cx.clearRect(0,0,W,H);
+const A=hero&&W<760?.55:1;let hot=null,hd=26;
+for(const b of B){const gr=cx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);gr.addColorStop(0,'rgba('+COL[b.c]+','+.12*A+')');gr.addColorStop(1,'rgba('+COL[b.c]+',0)');cx.fillStyle=gr;cx.beginPath();cx.arc(b.x,b.y,b.r,0,6.283);cx.fill()}
+for(const n of N){const d=Math.hypot(n.x-mx,n.y-my);n.g=d<R?Math.pow(1-d/R,1.6):0;if(d<hd){hd=d;hot=n}}
+for(const q of S){const g=Math.max(q.a.g,q.b.g);cx.strokeStyle='rgba('+COL[q.a.c]+','+A*(.26+g*.7)+')';cx.lineWidth=1+g*.9;cx.beginPath();cx.moveTo(q.a.x,q.a.y);cx.quadraticCurveTo(q.cx,q.cy,q.b.x,q.b.y);cx.stroke()}
+for(const n of N){cx.fillStyle='rgba('+COL[n.c]+','+A*(.22+n.g*.4)+')';cx.beginPath();cx.arc(n.x,n.y,n.r+3+n.g*2,0,6.283);cx.fill();cx.fillStyle='rgba(255,255,255,'+A*(.75+n.g*.25)+')';cx.beginPath();cx.arc(n.x,n.y,n.r*.62+n.g*1.4,0,6.283);cx.fill();
+if(n.g>.02){const rr=10+n.g*18,gr=cx.createRadialGradient(n.x,n.y,0,n.x,n.y,rr);gr.addColorStop(0,'rgba('+COL[n.c]+','+n.g*.55+')');gr.addColorStop(1,'rgba('+COL[n.c]+',0)');cx.fillStyle=gr;cx.beginPath();cx.arc(n.x,n.y,rr,0,6.283);cx.fill()}}
+if(hot){const gr=cx.createRadialGradient(hot.x,hot.y,0,hot.x,hot.y,38);gr.addColorStop(0,'rgba(255,255,255,.9)');gr.addColorStop(.25,'rgba('+COL[hot.c]+',.55)');gr.addColorStop(1,'rgba('+COL[hot.c]+',0)');cx.fillStyle=gr;cx.beginPath();cx.arc(hot.x,hot.y,38,0,6.283);cx.fill()}}
+function size(){W=cv.clientWidth;H=cv.clientHeight;if(!W||!H)return;dpr=Math.min(devicePixelRatio||1,2);cv.width=W*dpr;cv.height=H*dpr;build();draw()}
+const rq=()=>{raf||(raf=requestAnimationFrame(()=>{raf=0;draw()}))};
+const mv=e=>{const b=cv.getBoundingClientRect();mx=e.clientX-b.left;my=e.clientY-b.top;rq()};
+host.addEventListener('pointermove',mv);host.addEventListener('pointerdown',mv);
+host.addEventListener('pointerleave',()=>{mx=my=-999;rq()});
+new ResizeObserver(size).observe(cv)}
+document.querySelectorAll('canvas[data-net]').forEach(mk)})();
+(function(){const e=document.querySelectorAll('.sec h2,.sec .cards,.sec .sol,.route,.note');e.forEach(x=>x.classList.add('rv'));
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.08});
+e.forEach(x=>io.observe(x));setTimeout(()=>e.forEach(x=>x.classList.add('in')),4000)})();
+</script>
+</body>
+</html>
