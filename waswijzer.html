@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Waswijzer — Driessen Stoffen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F5;--ink:#1A1A1A;--acc:#E85D2A;--card:#FFFFFF;--line:#E6E2DC;--mute:#5E5A54;
+  --d:'Space Grotesk','Helvetica Neue',Arial,sans-serif;--b:'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:400 1rem/1.55 var(--b);
+  padding:max(16px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom))}
+.wrap{max-width:560px;margin:0 auto}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.badge{font:700 .7rem/1.3 var(--d);letter-spacing:.1em;background:var(--ink);color:var(--bg);padding:8px 11px}
+.lang{display:flex;border:1px solid var(--ink)}
+.lang button{font:700 .8rem/1 var(--d);letter-spacing:.04em;padding:10px 12px;min-width:44px;min-height:40px;border:0;background:transparent;color:var(--ink);cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.lang button+button{border-left:1px solid var(--ink)}
+.lang button[aria-pressed=true]{background:var(--acc);color:#fff}
+h1{font:700 clamp(2rem,9vw,2.9rem)/1.03 var(--d);letter-spacing:-.035em;margin:28px 0 12px;max-width:14ch}
+.sub{color:var(--mute);max-width:40ch;margin-bottom:22px}
+.list{display:grid;gap:10px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+details[open]{border-color:var(--ink)}
+summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:16px 16px 14px;-webkit-tap-highlight-color:transparent}
+summary::-webkit-details-marker{display:none}
+summary:active{background:#FFF3EC}
+summary::after{content:"";grid-row:1;grid-column:2;width:10px;height:10px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg);transition:transform .2s;margin-right:4px}
+details[open] summary::after{transform:rotate(-135deg)}
+.nm{font:700 1.12rem/1.2 var(--d);letter-spacing:-.015em}
+.mini{display:flex;gap:6px;grid-column:1/-1}
+.mini .ic svg{width:26px;height:26px}
+details[open] .mini{display:none}
+.panel{padding:2px 16px 18px;border-top:1px solid var(--line)}
+ul{list-style:none;display:grid;gap:12px;margin:14px 0 18px}
+li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center}
+li p{font-size:.97rem;max-width:36ch}
+.ic svg{width:42px;height:42px;display:block;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic svg text{fill:var(--ink);stroke:none;font:700 13px var(--d)}
+.ic .sl{stroke:var(--acc);stroke-width:3}
+.btn{display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;padding:12px 18px;background:var(--acc);color:#fff;
+  font:700 1rem/1.2 var(--d);text-decoration:none;border-radius:8px;-webkit-tap-highlight-color:transparent;transition:transform .12s,background .12s}
+.btn:hover{background:#D24E1F}.btn:active{transform:scale(.98);background:#BF4519}
+.btn.sm{min-height:46px;background:transparent;color:var(--acc);border:2px solid var(--acc)}
+.btn.sm:active{background:#FFF3EC}
+.btn:focus-visible,summary:focus-visible,.lang button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.reorder{margin-top:22px;background:var(--ink);color:var(--bg);border-radius:10px;padding:24px 18px 20px;display:grid;gap:16px}
+.reorder h2{font:700 1.45rem/1.15 var(--d);letter-spacing:-.02em;max-width:20ch}
+.reorder .btn{min-height:58px;font-size:1.05rem}
+.foot{margin-top:18px;font-size:.78rem;color:var(--mute);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <span class="badge">DRIESSEN STOFFEN — INTERACTIEVE WASWIJZER</span>
+    <div class="lang" role="group" aria-label="Taal / Language" id="lang"></div>
+  </div>
+  <h1 id="t"></h1>
+  <p class="sub" id="s"></p>
+  <div class="list" id="list"></div>
+  <section class="reorder">
+    <h2 id="h"></h2>
+    <a class="btn" id="c" href="https://www.driessenstoffen.nl/" target="_blank" rel="noopener"></a>
+  </section>
+  <p class="foot">Smart QR-service voor Driessen Stoffen • Powered by FlowOps NL</p>
+</div>
+
+<script>
+var URL_SHOP='https://www.driessenstoffen.nl/';
+var LANGS=['nl','en','de','fr'];
+var UI={
+ nl:{t:'Zo blijven uw stoffen het langst mooi',s:'Kies uw stofsoort voor directe was- en strijkinstructies.',b:'Bestel deze stof opnieuw →',h:'Op zoek naar een nieuwe kleur of bijpassend garen?',c:'Naar de webshop (driessenstoffen.nl) →'},
+ en:{t:'Keep your fabrics beautiful for longest',s:'Choose your fabric type for instant washing and ironing instructions.',b:'Reorder this fabric →',h:'Looking for a new colour or matching thread?',c:'Go to the webshop (driessenstoffen.nl) →'},
+ de:{t:'So bleiben Ihre Stoffe am längsten schön',s:'Wählen Sie Ihre Stoffart für direkte Wasch- und Bügelhinweise.',b:'Diesen Stoff nachbestellen →',h:'Auf der Suche nach einer neuen Farbe oder passendem Garn?',c:'Zum Webshop (driessenstoffen.nl) →'},
+ fr:{t:'Gardez vos tissus beaux le plus longtemps',s:'Choisissez votre type de tissu pour des instructions de lavage et de repassage immédiates.',b:'Recommander ce tissu →',h:'Vous cherchez une nouvelle couleur ou un fil assorti ?',c:'Vers la boutique (driessenstoffen.nl) →'}
+};
+/* i = иконки по строкам ("!" = перечёркнуто), n = названия, x = три строки ухода на языке */
+var CATS=[
+ {i:['wash:30','shrink','!tumble'],n:{nl:'Katoen & Tricot (Jersey)',en:'Cotton & Jersey',de:'Baumwolle & Jersey',fr:'Coton & Jersey'},x:{
+  nl:['Was op 30°C.','Was de stof eerst voor (voorwassen): krimp van 3–5% is normaal.','Niet in de droger.'],
+  en:['Wash at 30°C.','Pre-wash the fabric first: 3–5% shrinkage is normal.','No tumble dryer.'],
+  de:['Bei 30 °C waschen.','Stoff vorher waschen (dekatieren): 3–5 % Einlaufen ist normal.','Nicht in den Trockner.'],
+  fr:['Laver à 30 °C.','Prélaver le tissu d’abord : un rétrécissement de 3–5 % est normal.','Pas de sèche-linge.']}},
+ {i:['wash:30','spin','flat'],n:{nl:'Jogging & French Terry',en:'Sweatshirt & French Terry',de:'Sweat & French Terry',fr:'Molleton & French Terry'},x:{
+  nl:['Binnenstebuiten wassen op 30°C.','Zacht centrifugeren: max. 800 toeren.','Plat uitgespreid laten drogen.'],
+  en:['Wash inside out at 30°C.','Gentle spin: max. 800 rpm.','Dry flat, spread out.'],
+  de:['Auf links bei 30 °C waschen.','Schonend schleudern: max. 800 U/min.','Flach ausgebreitet trocknen.'],
+  fr:['Laver à l’envers à 30 °C.','Essorage doux : max. 800 tr/min.','Sécher à plat, bien étalé.']}},
+ {i:['washd:30','!wring','iron'],n:{nl:'Viscose & Linnen',en:'Viscose & Linen',de:'Viskose & Leinen',fr:'Viscose & Lin'},x:{
+  nl:['Fijnwasprogramma op 30°C.','Niet uitwringen.','Strijk licht vochtig aan de binnenkant.'],
+  en:['Delicate cycle at 30°C.','Do not wring.','Iron slightly damp, on the reverse side.'],
+  de:['Feinwaschprogramm bei 30 °C.','Nicht auswringen.','Leicht feucht von links bügeln.'],
+  fr:['Programme délicat à 30 °C.','Ne pas essorer à la main.','Repasser légèrement humide, sur l’envers.']}},
+ {i:['hand','drop','flat'],n:{nl:'Wol & Boiled Wool',en:'Wool & Boiled Wool',de:'Wolle & Walkloden',fr:'Laine & Laine bouillie'},x:{
+  nl:['Wolprogramma of handwas in koud water.','Gebruik speciaal wolwasmiddel.','Alleen horizontaal drogen.'],
+  en:['Wool cycle or hand wash in cold water.','Use a dedicated wool detergent.','Dry horizontally only.'],
+  de:['Wollprogramm oder Handwäsche in kaltem Wasser.','Spezielles Wollwaschmittel verwenden.','Nur liegend trocknen.'],
+  fr:['Programme laine ou lavage à la main à l’eau froide.','Utiliser une lessive spéciale laine.','Sécher uniquement à plat.']}},
+ {i:['wash:30','!soft','!iron'],n:{nl:'Velours, Teddy & Fleece',en:'Velour, Teddy & Fleece',de:'Velours, Teddy & Fleece',fr:'Velours, Teddy & Polaire'},x:{
+  nl:['Was op 30°C.','Geen wasverzachter: anders kleeft de pool aan elkaar.','Niet strijken.'],
+  en:['Wash at 30°C.','No fabric softener: the pile would stick together.','Do not iron.'],
+  de:['Bei 30 °C waschen.','Kein Weichspüler: der Flor verklebt sonst.','Nicht bügeln.'],
+  fr:['Laver à 30 °C.','Pas d’adoucissant : les poils colleraient.','Ne pas repasser.']}},
+ {i:['wash:30','!bleach','!soft'],n:{nl:'Softshell & Waterdichte stoffen',en:'Softshell & Waterproof fabrics',de:'Softshell & wasserdichte Stoffe',fr:'Softshell & Tissus imperméables'},x:{
+  nl:['Was op 30°C.','Geen bleekmiddel.','Geen wasverzachter: dat beschermt het membraan.'],
+  en:['Wash at 30°C.','No bleach.','No fabric softener: this protects the membrane.'],
+  de:['Bei 30 °C waschen.','Kein Bleichmittel.','Kein Weichspüler: schützt die Membran.'],
+  fr:['Laver à 30 °C.','Pas d’agent de blanchiment.','Pas d’adoucissant : protège la membrane.']}}
+];
+var TUB='<path d="M6 14h36l-4 24a4 4 0 0 1-4 3H14a4 4 0 0 1-4-3z"/>';
+var G={
+ tumble:'<rect x="8" y="8" width="32" height="32" rx="3"/><circle cx="24" cy="24" r="10"/>',
+ shrink:'<path d="M6 24h13m-4-4l4 4-4 4M42 24H29m4-4l-4 4 4 4M24 10v28"/>',
+ spin:'<circle cx="24" cy="24" r="14"/><path d="M24 10a14 14 0 0 1 14 14M33 20l5 4 4-5"/>',
+ flat:'<rect x="8" y="16" width="32" height="12" rx="2"/><path d="M5 35h38"/>',
+ wring:'<path d="M14 8c10 8 10 24 20 32M34 8c-10 8-10 24-20 32"/>',
+ iron:'<path d="M7 35h34c0-10-7-17-17-17h-8z"/><path d="M14 28h16"/>',
+ hand:TUB+'<path d="M14 28q3-3 5 0t5 0 5 0 5 0"/>',
+ drop:'<path d="M24 7c8 10 13 16 13 22a13 13 0 0 1-26 0c0-6 5-12 13-22z"/>',
+ soft:'<path d="M20 7h8v7l6 7v20H14V21l6-7z"/>',
+ bleach:'<path d="M24 8l17 31H7z"/>'
+};
+function ic(spec){
+ var no=spec.charAt(0)==='!'; if(no) spec=spec.slice(1);
+ var p=spec.split(':'), k=p[0], g;
+ if(k==='wash') g=TUB+'<text x="24" y="32" text-anchor="middle">'+p[1]+'</text>';
+ else if(k==='washd') g=TUB+'<text x="24" y="32" text-anchor="middle">'+p[1]+'</text><path d="M12 45h24"/>';
+ else g=G[k];
+ return '<span class="ic"><svg viewBox="0 0 48 48" aria-hidden="true">'+g+(no?'<path class="sl" d="M9 41L39 7"/>':'')+'</svg></span>';
+}
+var lang='nl', open=-1;
+function render(){
+ var u=UI[lang];
+ document.documentElement.lang=lang;
+ document.getElementById('t').textContent=u.t;
+ document.getElementById('s').textContent=u.s;
+ document.getElementById('h').textContent=u.h;
+ document.getElementById('c').textContent=u.c;
+ document.getElementById('lang').innerHTML=LANGS.map(function(l){
+  return '<button type="button" data-l="'+l+'" aria-pressed="'+(l===lang)+'">'+l.toUpperCase()+'</button>';}).join('');
+ document.getElementById('list').innerHTML=CATS.map(function(c,n){
+  return '<details data-n="'+n+'"'+(n===open?' open':'')+'><summary><span class="nm">'+c.n[lang]+'</span>'+
+   '<span class="mini">'+c.i.map(ic).join('')+'</span></summary><div class="panel"><ul>'+
+   c.x[lang].map(function(t,j){return '<li>'+ic(c.i[j])+'<p>'+t+'</p></li>';}).join('')+
+   '</ul><a class="btn sm" href="'+URL_SHOP+'" target="_blank" rel="noopener">'+u.b+'</a></div></details>';}).join('');
+}
+document.getElementById('lang').addEventListener('click',function(e){
+ var l=e.target.getAttribute('data-l'); if(l&&l!==lang){lang=l;render();}
+});
+document.getElementById('list').addEventListener('toggle',function(e){
+ var d=e.target; if(!d.hasAttribute('data-n')) return;
+ var n=+d.getAttribute('data-n');
+ if(d.open){ open=n; document.querySelectorAll('#list details[open]').forEach(function(o){if(o!==d)o.removeAttribute('open');}); }
+ else if(open===n){ open=-1; }
+},true);
+render();
+</script>
+</body>
+</html>

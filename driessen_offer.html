@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FlowOps NL × Driessen Stoffen — Slimme QR-oplossingen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F5F7; --ink:#12141A; --mint:#3EF2C0; --violet:#8B3DFF;
+  --text-on-dark:#E8EAF0; --muted-dark:#A3A9B8; --muted:#5B6070; --line:#2A2E3A;
+  --display:'Space Grotesk','Helvetica Neue',Arial,sans-serif;
+  --body:'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;
+  padding:max(18px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom));}
+.sheet{max-width:880px;margin:0 auto;display:grid;gap:14px}
+
+/* Шапка */
+.head{padding:8px 2px 6px}
+.badge{display:inline-block;font:700 .72rem/1 var(--display);letter-spacing:.14em;background:var(--ink);color:var(--mint);
+  padding:8px 12px;border:1px solid var(--ink)}
+.head h1{font:700 clamp(1.9rem,7.4vw,3.2rem)/1.02 var(--display);letter-spacing:-.035em;margin:16px 0 12px;max-width:16ch}
+.head p{font-size:1.02rem;color:var(--muted);max-width:52ch}
+
+/* Bento-карточки */
+.card{background:var(--ink);color:var(--text-on-dark);border:1px solid var(--line);display:grid;gap:0;
+  grid-template-columns:1fr;border-radius:6px;overflow:hidden;position:relative}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--mint)}
+.card.back::before{background:linear-gradient(var(--violet),var(--mint))}
+.txt{padding:24px 22px 22px 26px;display:flex;flex-direction:column;gap:14px}
+.tag{font:700 .7rem/1.35 var(--display);letter-spacing:.12em;color:var(--mint)}
+.back .tag{color:var(--violet);background:linear-gradient(90deg,var(--violet),var(--mint));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.card h2{font:700 clamp(1.45rem,5.6vw,2.15rem)/1.12 var(--display);letter-spacing:-.025em;color:#fff;max-width:20ch}
+.stars{color:var(--mint);letter-spacing:.12em}
+.desc{font-size:.95rem;color:var(--muted-dark);border-top:1px solid var(--line);padding-top:14px;max-width:46ch}
+
+/* QR-блок (кликабельный) */
+.qr{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#fff;color:var(--ink);
+  text-decoration:none;padding:24px 18px 18px;border-top:1px solid var(--line);-webkit-tap-highlight-color:transparent;
+  transition:background .15s,transform .15s}
+.qr:hover{background:#F0FFFA}
+.qr:active{background:#D9FFF3;transform:scale(.985)}
+.qr:focus-visible,.pkg:focus-visible{outline:3px solid var(--violet);outline-offset:-3px}
+.qrbox{width:196px;height:196px;padding:12px;background:#fff;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center}
+.qrbox canvas,.qrbox img,.qrbox svg{display:block;width:100%!important;height:100%!important;image-rendering:pixelated}
+.qrbox .nofb{font:600 .8rem/1.3 var(--display);text-align:center;word-break:break-all}
+.hint{font:600 .92rem/1.2 var(--display);border-bottom:2px solid var(--violet);padding-bottom:2px}
+
+/* Выбор пакета */
+.pick{background:#fff;border:2px solid var(--violet);border-radius:6px;padding:24px 22px;display:grid;gap:16px;
+  box-shadow:6px 6px 0 var(--mint)}
+.pick h3{font:700 clamp(1.3rem,5vw,1.8rem)/1.1 var(--display);letter-spacing:-.02em}
+.opt{border:1px solid var(--ink);padding:16px 16px 15px;display:grid;gap:6px;transition:background .15s}
+.opt:active{background:#F0FFFA}
+.opt b{font:700 1.02rem/1.25 var(--display);letter-spacing:-.01em}
+.opt .price{display:inline-block;font:700 .9rem/1 var(--display);background:var(--ink);color:var(--mint);padding:6px 10px;justify-self:start}
+.opt p{font-size:.94rem;color:#2C303B;max-width:62ch}
+.foot{font-size:.78rem;color:#7A7F8E;line-height:1.5}
+.foot strong{color:#5B6070;font-weight:600}
+
+/* Планшет / десктоп / печать: текст слева, QR справа */
+@media (min-width:720px){
+  body{padding:36px 28px}
+  .card{grid-template-columns:1fr 280px}
+  .qr{border-top:0;border-left:1px solid var(--line)}
+  .opt{grid-template-columns:1fr}
+}
+@media (max-width:400px){ .txt{padding:20px 16px 18px 20px} .qrbox{width:176px;height:176px} }
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* Печать: вертикальный A4, блоки не разрываются */
+@page{size:A4 portrait;margin:10mm}
+@media print{
+  html,body{background:var(--paper)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{padding:0;font-size:10pt}
+  .sheet{max-width:none;gap:6mm}
+  .card,.pick,.head,.opt,.qr{break-inside:avoid;page-break-inside:avoid}
+  .card{grid-template-columns:1fr 62mm!important}
+  .qr{border-top:0!important;border-left:1px solid var(--line)}
+  .qrbox{width:46mm;height:46mm}
+  .head h1{font-size:24pt} .card h2{font-size:17pt} .pick h3{font-size:15pt}
+  .pick{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <header class="head">
+    <span class="badge">FLOWOPS NL × DRIESSEN STOFFEN</span>
+    <h1>Slimme QR-oplossingen voor Driessen Stoffen</h1>
+    <p>Meer 5-sterren Trustpilot-reviews in heel Europa &amp; snellere nabestellingen — zonder extra handmatig werk</p>
+  </header>
+
+  <!-- ЭТАЖ 1 -->
+  <section class="card front" aria-labelledby="h-front">
+    <div class="txt">
+      <span class="tag">VOORKANT PAKKETKAART — TRUSTPILOT REVIEWS</span>
+      <h2 id="h-front" lang="en">Happy with your fabrics? Share your experience in 10 seconds. <span class="stars" aria-label="5 stars">★★★★★</span></h2>
+      <p class="desc">Review-bescherming &amp; statistieken: 4–5★ beoordelingen gaan direct door naar Trustpilot (om de TrustScore actief te verhogen), 1–3★ feedback komt privé bij de manager terecht. Inclusief live scanstatistieken per land.</p>
+    </div>
+    <a class="qr" href="https://www.trustpilot.com/evaluate/driessenstoffen.nl" target="_blank" rel="noopener" aria-label="QR-code Trustpilot reviews — scan of tik om te testen">
+      <div class="qrbox" data-url="https://www.trustpilot.com/evaluate/driessenstoffen.nl"></div>
+      <span class="hint">Scan of tik om te testen →</span>
+    </a>
+  </section>
+
+  <!-- ЭТАЖ 2 -->
+  <section class="card back" aria-labelledby="h-back">
+    <div class="txt">
+      <span class="tag">ACHTERKANT PAKKETKAART — WASWIJZER &amp; NABESTELLEN</span>
+      <h2 id="h-back" lang="en">Need care tips or a quick reorder? Scan for our interactive fabric guide.</h2>
+      <p class="desc">Geen vertraging bij het inpakken: de inpakker legt één stevige kaart in de doos bij de pakbon — geen stickers plakken, geen beschadiging bij het openen van het pakket.</p>
+    </div>
+    <a class="qr" href="https://flowops-nl.github.io/FlowOps-Site/waswijzer.html" target="_blank" rel="noopener" aria-label="QR-code waswijzer en nabestellen — scan of tik om te testen">
+      <div class="qrbox" data-url="https://flowops-nl.github.io/FlowOps-Site/waswijzer.html"></div>
+      <span class="hint">Scan of tik om te testen →</span>
+    </a>
+  </section>
+
+  <!-- ПАКЕТЫ -->
+  <section class="pick" aria-labelledby="h-pick">
+    <h3 id="h-pick">Kies uw pakket (FlowOps NL):</h3>
+    <div class="opt">
+      <b>Optie 1 — Smart QR Systeem</b>
+      <span class="price">€ 249 eenmalig + € 29/mnd</span>
+      <p>Inclusief dubbelzijdig ontwerp op maat, eerste drukwerk-oplage van 1.000 luxe A6-pakketkaarten (350 grams mat), review-filter (4–5★ Trustpilot / 1–3★ privé), live scan-dashboard en directe koppeling met catalogus &amp; waswijzer.</p>
+    </div>
+    <div class="opt">
+      <b>Optie 2 — QR Systeem + Meertalige AI-Stoffenadviseur</b>
+      <span class="price">€ 990 eenmalig + € 179/mnd</span>
+      <p>Alles uit Optie 1, aangevuld met een AI-assistent getraind op het assortiment van Driessen Stoffen (NL/DE/FR/EN) die 24/7 vragen over stofeigenschappen en onderhoud beantwoordt en direct naar nabestellen leidt.</p>
+    </div>
+    <p class="foot">Alle prijzen zijn excl. btw. Bijbestellen van extra kaarten tegen kostprijs. Interesse? Ik bespreek graag welke optie het beste past. — <strong>Iryna Lysytsyna | FlowOps NL</strong></p>
+  </section>
+
+</main>
+
+<script>
+/* Генерация реальных QR: 1) qrcodejs (cdnjs)  2) qrcode-generator (jsDelivr)  3) текстовая ссылка */
+(function(){
+  var boxes = document.querySelectorAll('.qrbox');
+  var DARK = '#12141A', LIGHT = '#ffffff';
+
+  function withQrcodejs(){
+    boxes.forEach(function(b){
+      b.innerHTML = '';
+      new QRCode(b, {text:b.dataset.url, width:400, height:400, colorDark:DARK, colorLight:LIGHT, correctLevel:QRCode.CorrectLevel.M});
+    });
+  }
+  function withQrGenerator(){
+    boxes.forEach(function(b){
+      var q = qrcode(0,'M'); q.addData(b.dataset.url); q.make();
+      b.innerHTML = q.createSvgTag({cellSize:4, margin:0, scalable:true});
+      var s = b.querySelector('svg'); if(s){ s.setAttribute('shape-rendering','crispEdges'); s.querySelectorAll('rect,path').forEach(function(n){ if(n.getAttribute('fill')==='#000000'||n.getAttribute('fill')==='black') n.setAttribute('fill',DARK); }); }
+    });
+  }
+  function asText(){
+    boxes.forEach(function(b){
+      b.innerHTML = '<span class="nofb">QR kon niet laden — tik hier om de link te openen:<br>'+b.dataset.url.replace(/^https?:\/\//,'')+'</span>';
+    });
+  }
+  function load(src, ok, fail){
+    var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = fail; document.head.appendChild(s);
+  }
+  function second(){
+    load('https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js',
+      function(){ try{ withQrGenerator(); }catch(e){ asText(); } }, asText);
+  }
+  load('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
+    function(){ try{ withQrcodejs(); }catch(e){ second(); } }, second);
+})();
+</script>
+</body>
+</html>
